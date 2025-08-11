@@ -13,8 +13,6 @@ import {
   KeyboardAvoidingView,
   ScrollView,
 } from "react-native";
-import * as WebBrowser from "expo-web-browser";
-import * as Linking from "expo-linking";
 
 const client = new Client()
   .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID ?? "")
@@ -56,19 +54,12 @@ export default function AuthScreen() {
 
   const handleGoogleLogin = async () => {
     try {
-      const deepLink = Linking.createURL("/");
-
-      const response = await account.createOAuth2Session(
+      // This will redirect to Google OAuth in a browser
+      await account.createOAuth2Session(
         OAuthProvider.Google,
-        deepLink,
-        deepLink
+        Platform.OS === "web" ? window.location.origin : "appwrite-callback://",
+        Platform.OS === "web" ? window.location.origin : "appwrite-callback://",
       );
-
-      if (response) {
-        await WebBrowser.openAuthSessionAsync(response.toString(), deepLink);
-      } else {
-        Alert.alert("Failed to get OAuth URL");
-      }
     } catch (err) {
       if (err instanceof AppwriteException) {
         Alert.alert(err.message);
@@ -92,7 +83,6 @@ export default function AuthScreen() {
         const user = await account.get();
         setUser(user);
       } catch (err) {
-        console.log("Error fetching user", err);
         setUser(null);
       } finally {
         setCheckingUser(false);
