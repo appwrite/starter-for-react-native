@@ -1,4 +1,4 @@
-import { Client, Account, AppwriteException, OAuthProvider } from "react-native-appwrite";
+import { Client, Account, AppwriteException, OAuthProvider } from "appwrite";
 import { useEffect, useState } from "react";
 import {
   View,
@@ -12,7 +12,6 @@ import {
   StatusBar,
   KeyboardAvoidingView,
   ScrollView,
-  AppState,
 } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
@@ -59,7 +58,7 @@ export default function AuthScreen() {
     try {
       const deepLink = Linking.createURL("/");
 
-      const response = await account.createOAuth2Token(
+      const response = await account.createOAuth2Session(
         OAuthProvider.Google,
         deepLink,
         deepLink
@@ -100,23 +99,6 @@ export default function AuthScreen() {
       }
     };
     fetchUser();
-  }, []);
-
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", async (nextAppState) => {
-      if (nextAppState === "active") {
-        try {
-          const user = await account.get();
-          setUser(user);
-        } catch (err) {
-          setUser(null);
-        }
-      }
-    });
-
-    return () => {
-      subscription.remove();
-    };
   }, []);
 
   if (checkingUser) {
