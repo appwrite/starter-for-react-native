@@ -12,7 +12,7 @@ Clone this repository to your local machine using Git:
 
 ## 🛠️ Development guid
 1. **Configure Appwrite**<br/>
-   Navigate to `.env` and update the values to match your Appwrite project credentials.
+   Rename `.env.example` to `.env` and update the values to match your Appwrite project credentials.
 2. **Customize as needed**<br/>
    Modify the starter kit to suit your app's requirements. Adjust UI, features, or backend
    integrations as per your needs.
