@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import { Header } from "@/components/Header";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import { Card } from "@/components/Card";
 import { fontStyles } from "@/styles/font";
 import { IconArrowSmRight } from "@/assets/images/IconArrowSmRight";
@@ -21,6 +21,35 @@ import { AppwriteException, Client } from "appwrite";
 const client = new Client()
   .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID ?? "")
   .setEndpoint(process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT ?? "");
+
+// prevent ssr issues
+function ClientOnlyBottomSheet({ children, ...props }: any) {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
+  }
+
+  return <BottomSheet {...props}>{children}</BottomSheet>;
+}
+
+function ClientOnlyGestureHandler({ children }: { children: React.ReactNode }) {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return <>{children}</>;
+  }
+
+  return <GestureHandlerRootView>{children}</GestureHandlerRootView>;
+}
 
 export default function HomeScreen() {
   const [connectionState, setConnectionState] = useState<
@@ -86,7 +115,7 @@ export default function HomeScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <GestureHandlerRootView>
+      <ClientOnlyGestureHandler>
         <ScrollView>
           <Header pingFunction={doPing} state={connectionState} />
           <View
@@ -126,7 +155,7 @@ export default function HomeScreen() {
             </Card>
           </View>
         </ScrollView>
-        <BottomSheet
+        <ClientOnlyBottomSheet
           index={0}
           snapPoints={snapPoints}
           enablePanDownToClose={false}
@@ -141,8 +170,8 @@ export default function HomeScreen() {
               logs={logs}
             />
           </BottomSheetView>
-        </BottomSheet>
-      </GestureHandlerRootView>
+        </ClientOnlyBottomSheet>
+      </ClientOnlyGestureHandler>
     </View>
   );
 }
