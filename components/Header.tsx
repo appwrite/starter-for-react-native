@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
   },
   background: {
     width: "100%",
-    backgroundSize: "contain",
   },
   line: {
     width:
