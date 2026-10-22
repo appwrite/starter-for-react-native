@@ -17,7 +17,7 @@ Clone this repository to your local machine using Git:
    Modify the starter kit to suit your app's requirements. Adjust UI, features, or backend
    integrations as per your needs.
 3. **Install dependencies**<br/>
-   Run `npm install` to install all dependencies.
+   Use Node.js 22.13 or newer, then run `npm install` to install all dependencies.
 4. **Run the app**<br/>
    Start the project by running `npx expo start`.  Download [Expo Go](https://expo.dev/go) to run the app on your device.
 
