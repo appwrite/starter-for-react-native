@@ -68,7 +68,7 @@
   "private": true,
   "overrides": {
     "js-yaml@3": {
-      "argparse": "^2.0.1"
+      "argparse": "^3.0.0"
     }
   }
 }
